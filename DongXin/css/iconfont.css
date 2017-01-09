@@ -1,0 +1,38 @@
+
+@font-face {font-family: "iconfont";
+  src:url('../fonts/iconfont.ttf') format('truetype'); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+}
+
+.icon-gpsguanli:before { content: "\e600"; }
+
+.icon-msnui-save:before { content: "\e61e"; }
+
+.icon-dianliang3:before { content: "\e634"; }
+
+.icon-daosanjiao:before { content: "\e620"; }
+
+.icon-gps0:before { content: "\e615"; }
+
+.icon-gps1:before { content: "\e60a"; }
+
+.icon-gps2:before { content: "\e632"; }
+
+.icon-dianliang2:before { content: "\e60c"; }
+
+.icon-dianliang1:before { content: "\e635"; }
+
+.icon-xinhao01:before { content: "\e668"; }
+
+.icon-xinhao02:before { content: "\e669"; }
+
+.icon-xinhao03:before { content: "\e66a"; }
+
+.icon-xinhao04:before { content: "\e66b"; }

@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设备列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../css/app.css" />-->
+		<style type="text/css">
+			 /*定义空样式是为了方便mui选择器获取元素*/
+			.online{ }
+			.offline{}
+			.inactivated{}   
+			.grouplsit{}
+			.mui-card .mui-control-content {
+				/*background-color: white;
+				min-height: 400px;
+				padding: 10px;*/
+			}
+		 html,body{width: 100%;height: 100%;}
+		</style>
+	</head> 
+	<body>
+		<header class="mui-bar mui-bar-nav" style="padding-right: 15px;">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">设备列表</h1> 
+		</header>
+		<div class="mui-content" style="height: 100%;">
+			<div id="slider" class="mui-slider" style=" height: 100%;">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#item1online" id="aOnLine">
+						在线(0)
+					</a>
+					<a class="mui-control-item" href="#item2offline" id="aOffLine">
+						离线(0)
+					</a>
+					<a class="mui-control-item" href="#item3inactivated" id="aInactivaed">
+						未激活(0)
+					</a>
+					<a class="mui-control-item" href="#item4all" id="aAll">
+						全部(0)
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-3"></div>
+				<div class="mui-slider-group" style="height: 93%; ">
+					<div id="item1online" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-card">
+									<ul class="mui-table-view grouplsit" id="onlineGroupList">
+											  
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="item2offline" class="mui-slider-item mui-control-content">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-card">
+									<ul class="mui-table-view grouplsit" id="offlineGroupList">
+										  
+									</ul>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="item3inactivated" class="mui-slider-item mui-control-content">
+						<div id="scroll3" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-card">
+									<ul class="mui-table-view grouplsit" id="inactivatedGroupList">
+										 
+									</ul>
+								</div>
+							</div>
+						</div> 
+					</div>
+					<div id="item4all" class="mui-slider-item mui-control-content">
+						<div id="scroll4" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<div class="mui-card">
+									<ul class="mui-table-view grouplsit" id="allGroupList">
+										  
+									</ul>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+		
+		 
+		 
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/app.js" ></script>
+		<script type="text/javascript" src="../js/basic/ajax.js" ></script>
+	    <script type="text/javascript" src="../js/basic/deviceList.js" ></script>
+	    <script type="text/javascript">
+	   		mui.init({
+				swipeBack: false
+			});
+/*	    	(function($) {
+				$('.mui-scroll-wrapper').scroll({
+					indicators: true //是否显示滚动条
+				});
+				var html2 = '<ul class="mui-table-view"><li class="mui-table-view-cell">第二个选项卡子项-1</li><li class="mui-table-view-cell">第二个选项卡子项-2</li><li class="mui-table-view-cell">第二个选项卡子项-3</li><li class="mui-table-view-cell">第二个选项卡子项-4</li><li class="mui-table-view-cell">第二个选项卡子项-5</li></ul>';
+				var html3 = '<ul class="mui-table-view"><li class="mui-table-view-cell">第三个选项卡子项-1</li><li class="mui-table-view-cell">第三个选项卡子项-2</li><li class="mui-table-view-cell">第三个选项卡子项-3</li><li class="mui-table-view-cell">第三个选项卡子项-4</li><li class="mui-table-view-cell">第三个选项卡子项-5</li></ul>';
+				var item2 = document.getElementById('item2offline');
+				var item3 = document.getElementById('item3inactivated');
+				document.getElementById('slider').addEventListener('slide', function(e) {
+					if (e.detail.slideNumber === 1) {
+						if (item2.querySelector('.mui-loading')) {
+							setTimeout(function() {
+								//item2.querySelector('.mui-scroll').innerHTML = html2;
+							}, 500);
+						}
+					} else if (e.detail.slideNumber === 2) {
+						if (item3.querySelector('.mui-loading')) {
+							setTimeout(function() {
+								//item3.querySelector('.mui-scroll').innerHTML = html3;
+							}, 500);
+						}
+					}
+				});
+				var sliderSegmentedControl = document.getElementById('sliderSegmentedControl');
+				$('.mui-input-group').on('change', 'input', function() {
+					if (this.checked) {
+						sliderSegmentedControl.className = 'mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-' + this.value;
+						//force repaint
+						sliderProgressBar.setAttribute('style', sliderProgressBar.getAttribute('style'));
+					}
+				});
+			})(mui);*/
+	    </script>
+	</body>
+
+</html>

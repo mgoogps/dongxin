@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" type="text/css" href="../css/mui.min.css"/>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">分组管理</h1>
+		    <a class="mui-icon-right mui-pull-right mui-icon mui-icon-plusempty"></a>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view" id="ulGroupList">
+		           
+		    </ul>
+		</div>
+	<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/app.js" ></script>
+    <script type="text/javascript" src="../js/basic/ajax.js" ></script>
+    <script type="text/javascript">
+    mui.init()
+    mui.plusReady(function () {
+    	
+    	mui(".mui-icon-plusempty")[0].addEventListener('tap',function () {
+    	     mui.prompt('','请输入分组名称','新增分组',['取消','确认'],function (e) {
+    	        if(e.index==1){
+    	        	var state = app.getState();
+    	        	var val = document.querySelector('.mui-popup-input input').value
+    	     		var way = new ajaxPar("AddGroups");
+    	     		way.ajax({
+    	     			url:"/ajax/DevicesAjax.asmx?op=AddGroups",
+    	     			data:{userid:state.userid,groupname:val},
+    	     			success:function (res) {
+    	     				mui.toast(res.Message);
+    	     				if (res.StatusCode == 200) {
+    	     					var item = {};
+    	     					item.GroupName = val;
+    	     					item.GroupID = res.Result;
+    	     					var li = craeteLi(item);
+    	     					document.getElementById("ulGroupList").appendChild(li);
+    	     				}
+    	     			}
+    	     		});
+    	     	}
+    	    },'div')
+    	})
+    	GetGroupList (); 
+    });
+    function GetGroupList () {
+    	var way = new ajaxPar("GetGroupList");
+		way.ajax({
+			url:"/ajax/DevicesAjax.asmx?op=GetGroupList",
+			data:{userid:"0"},
+			success:function(res){
+				//console.log(JSON.parse(res));
+				var html=[];
+				mui.each(res,function (index,item) {
+					var li = craeteLi(item);
+					document.getElementById("ulGroupList").appendChild(li);
+				}) 
+			}
+		}); 
+    }
+    function craeteLi(item) {
+    	var li = document.createElement("li");
+		li.setAttribute("class","mui-table-view-cell")
+		li.innerHTML = '<a class="mui-navigate-right" href="#">'+  item.GroupName +'</a>';
+		li.id = "Group_"+ item.GroupID;
+		li.addEventListener("tap",function(e) {
+			var id = this.getAttribute("id").split("_")[1];
+			if (id == "-1") {
+				mui.toast("默认组不可以修改");
+				return;
+			}
+			var _li = this;
+			var name= this.innerText;
+		 	mui.prompt('','请输入分组名称','修改分组',['取消','删除','修改'],function (e) { 
+		 	    if (e.index == 2) {
+		 	    	var val = document.querySelector('.mui-popup-input input').value
+		 	    	way = new ajaxPar("UpdateGroups");
+		 	    	way.ajax({
+		 	    		url:"/ajax/DevicesAjax.asmx?op=UpdateGroups",
+		 	    		data:{groupid:id,groupname:val},
+		 	    		success:function (res) {
+		 	    			mui.toast(res.Message);
+		 	    			if (res.StatusCode == 200) {
+		 	    				li.lastChild.innerText = val;
+		 	    			}
+		 	    		}
+		 	    	});
+		 	    }else if(e.index == 1) { 
+		 	    	mui.confirm('确认删除 '+ name +' 这个分组?','提示',['取消','确认'],function (e) {
+		 	    		if (e.index == 1) {
+		 	    			way = new ajaxPar("DeleteGroups");
+		 	    			way.ajax({
+		 	    				url:"/ajax/DevicesAjax.asmx?op=DeleteGroups",
+		 	    				data:{groupid:id},
+		 	    				success:function(res){
+		 	    					mui.toast(res.Message);
+		 	    					if (res.StatucCode == 200) { 
+		 	    						document.getElementById("ulGroupList").removeChild(_li);
+		 	    					}
+		 	    				}
+		 	    			});
+		 	    		}	
+		 	    	},'div')
+		 	    }
+		 	},'div');
+		 	document.querySelector('.mui-popup-input input').value=name;
+		});
+		return li;
+    }
+    </script>
+	</body>
+</html>

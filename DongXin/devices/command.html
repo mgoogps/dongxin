@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">命令下发</h1> 
+		</header>
+		<div class="mui-content">
+		  <ul class="mui-table-view"> 
+		        <li class="mui-table-view-cell">
+		           	打开报警
+					<button type="button" class="mui-btn mui-btn-primary" value="3"> 下发 </button>
+		        </li>
+		        <li class="mui-table-view-cell">
+		           	关闭报警
+					<button type="button" class="mui-btn mui-btn-primary" value="4"> 下发 </button>
+		        </li>
+		         <li class="mui-table-view-cell">
+		           	远程关机
+					<button type="button" class="mui-btn mui-btn-primary" value="5"> 下发 </button>
+		        </li>
+		      </ul>  
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/app.js" ></script>
+		<script type="text/javascript" src="../js/basic/ajax.js" ></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function () {
+				var self = plus.webview.currentWebview();
+				var deviceid = self.deviceid;
+				var imei= self.imei;
+				var _back = mui.back;
+				mui(document.body).on("tap",".mui-btn",function(e){
+					var val = this.getAttribute("value");
+					var cmd = imei; 
+					switch (val){
+						case "1":
+							cmd += ",SF"
+							break;
+						case "2":
+							cmd += ",CF"
+							break;
+						case "3":
+							cmd += ",DY"
+							break;
+						case "4":
+							cmd += ",TY"
+							break;
+						case "5":
+							cmd += ",SHUT"
+							break;
+					}
+				 
+					var a = new ajaxPar("SendCommand");
+					a.ajax({
+						url:"/ajax/DevicesAjax.asmx?op=SendCommand",
+						data:{command : cmd},
+						success:function(res){
+							plus.nativeUI.toast(res.Message);
+							if (res.StatusCode == 200) {
+								mui.fire(mapPage,"show",{id:deviceid});
+						 		_back();
+							}
+						}
+					});
+				})
+				
+				var mapPage = mui.preload({
+					"id": 'webmap',
+					"url": 'webmap.html'
+				}); 
+				
+				mui.back = function(event) {
+					 mui.fire(mapPage,"show",{id:deviceid});
+					 _back();
+				};
+			})
+		</script>
+	</body>
+
+</html>

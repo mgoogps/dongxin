@@ -1,0 +1,251 @@
+{
+  "login.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "css/style.css",
+      "js/mui.enterfocus.js",
+      "images/logo.png",
+      "js/Basic/md5.js",
+      "js/basic/md5.js",
+      "fonts/mui.ttf",
+      "js/basic/update.js"
+    ],
+    "refer": [
+      "main.html",
+      "webmap.html",
+      "devices/device_list.html",
+      "unlock.html",
+      "forget_password.html",
+      "reg.html"
+    ]
+  },
+  "main.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "webmap.html",
+      "/devices/device_list.html",
+      "devices/device_list.html",
+      "demo_map.html",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
+    ],
+    "refer": [
+      "maps.html",
+      "setting.html",
+      "/devices/device_list.html",
+      "devices/device_list.html",
+      "webmap.html",
+      "demo_map.html"
+    ]
+  },
+  "setting.html": {
+    "resources": [
+      "libs/easymob-webim-sdk/easemob.im-1.0.5.js",
+      "fonts/mui.ttf",
+      "libs/easymob-webim-sdk/json2.js",
+      "libs/easymob-webim-sdk/jquery-1.11.1.js",
+      "js/mui.locker.js",
+      "js/feedback.js",
+      "css/feedback-page.css",
+      "js/feedback-page.js",
+      "libs/easymob-webim-sdk/strophe-custom-2.0.0.js",
+      "js/mui.view.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "images/iconfont-tianjia.png",
+      "js/basic/update.js",
+      "js/basic/mgoo-feedback.js",
+      "js/basic/ajax.js"
+    ],
+    "refer": [
+      "login.html"
+    ]
+  },
+  "maps.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/app.js",
+      "fonts/mui.ttf",
+      "js/basic/ajax.js",
+      "js/map/mapshtml.js"
+    ],
+    "refer": []
+  },
+  "webmap.html": {
+    "resources": [
+      "main.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/map/map.js",
+      "js/basic/ajax.js",
+      "/images/maps/point.png",
+      "images/maps/point.png",
+      "images/maps/label.png",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf",
+      "images/maps/point@24.png",
+      "js/basic/utils.js",
+      "js/map/webmap.js",
+      "js/basic/update.js",
+      "images/maps/point-online.gif",
+      "images/maps/point-escape.gif"
+    ],
+    "refer": [
+      "main.html",
+      "devices/device_list.html",
+      "mycenter/center_index.html",
+      "setting.html",
+      "login.html",
+      "devices/device_detail.html",
+      "devices/history.html",
+      "devices/command.html"
+    ]
+  },
+  "devices/device_list.html": {
+    "resources": [
+      "main.html",
+      "js/basic/ajax.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "images/lsitcar.png",
+      "fonts/mui.ttf",
+      "js/basic/deviceList.js",
+      "css/app.css"
+    ],
+    "refer": [
+      "main.html",
+      "maps.html",
+      "webmap.html"
+    ]
+  },
+  "demo_map.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "mycenter/center_index.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "images/logo.png",
+      "js/feedback.js",
+      "js/mui.view.js",
+      "js/app.js",
+      "js/basic/centerIndex.js",
+      "js/basic/ajax.js"
+    ],
+    "refer": [
+      "setting.html",
+      "mycenter/guide.html",
+      "mycenter/device_manage.html",
+      "mycenter/group_manage.html"
+    ]
+  },
+  "mycenter/guide.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "unlock.html": {
+    "resources": [
+      "js/mui.locker.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "main.html",
+      "login.html"
+    ]
+  },
+  "forget_password.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "reg.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "devices/device_detail.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "js/basic/ajax.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/plugin/picker/mui.picker.min.js",
+      "js/plugin/picker/mui.picker.min.css"
+    ],
+    "refer": []
+  },
+  "devices/history.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "js/basic/ajax.js",
+      "css/mui.min.css",
+      "js/map/map.js",
+      "js/map/BDLuShu.js",
+      "js/plugin/picker/mui.picker.min.css",
+      "js/plugin/picker/mui.picker.min.js",
+      "js/basic/utils.js",
+      "images/maps/car.png"
+    ],
+    "refer": []
+  },
+  "devices/command.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/app.js",
+      "js/basic/ajax.js"
+    ],
+    "refer": []
+  },
+  "mycenter/device_manage.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/app.js",
+      "js/basic/ajax.js"
+    ],
+    "refer": [
+      "devices/device_detail.html"
+    ]
+  },
+  "mycenter/group_manage.html": {
+    "resources": [
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "js/basic/ajax.js"
+    ]
+  }
+}

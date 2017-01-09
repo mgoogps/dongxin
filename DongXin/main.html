@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		
+		<style>
+			ul {
+				font-size: 14px;
+				color: #8f8f94;
+			}
+			.mui-btn {
+				padding: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="padding-right: 15px;">
+			<h1 class="mui-title">登录模板</h1>
+			<button id='setting' class=" mui-pull-right mui-btn-link">设置</button>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<p>
+					您好 <span id='account'></span>，您已成功登录。
+					<ul>
+						<!--<li>这是mui带登录和设置模板的示例App首页。</li>
+						<li>您可以点击右上角的 “设置” 按钮，进入设置模板，体验div窗体切换示例。</li>
+						<li>在 “设置” 中点击 “退出” 可以 “注销当前账户” 或 “直接关闭应用”。</li>
+						<li>你可以设置 “锁屏图案”，这样可通过手势密码代替输入账号、密码；</li>-->
+					</ul>
+				</p>
+				<!--<button  class="mui-btn mui-btn-block mui-btn-primary">设置</button>-->
+				<!--
+				<button id='exit' class="mui-btn mui-btn-block mui-btn-green">关闭</button>
+                <button id='logout' class="mui-btn mui-btn-red mui-btn-block">注销登录</button>
+                -->
+			</div>
+			 <a id="openmaps">跳转到地图</a> <br /><br /><br />
+			 <a id="openwebmaps"  >跳转到Web地图</a>
+			 <br /><br /><br />
+			 <a id="deviceweb"  > 跳到设备列表 </a>
+			 <br /><br /><br />
+		
+			 	 
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+		 
+		 	
+			(function($, doc) {
+				$.init();
+				
+				$.plusReady(function() {
+					
+						var previous_deviceid = app.getCurrentDeviceID();
+				 	console.log("previous_deviceid:"+previous_deviceid);
+				 	if (previous_deviceid == 'null' || previous_deviceid== null) {
+				 		console.log("跳转到设备列表...");
+				 		$.openWindow({ 
+							id: 'device_list',
+							url: 'devices/device_list.html',
+							show: {
+								autoShow: true,
+								//aniShow: 'pop-in'
+							},
+							styles: {
+								popGesture: 'hide'
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载...',
+							},
+							extras:{
+								 
+							}
+			 			});
+				 	}else{
+				 		console.log("跳转到地图："+previous_deviceid);
+				 		$.openWindow({ 
+							id: 'maps',
+							url: 'webmap.html',
+							show: {
+								autoShow: true,
+								//aniShow: 'pop-in'
+							},
+							styles: {
+								popGesture: 'hide'
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载...',
+							},
+							extras:{
+								 deviceID:previous_deviceid
+							}
+			 			});
+				 	}
+					var settings = app.getSettings();
+					var account = doc.getElementById('account');
+					//
+					window.addEventListener('show', function() {
+						var state = app.getState();
+						account.innerText = state.account;
+					}, false);
+						
+					
+			
+				return;
+			
+//					var settingPage = $.preload({
+//						"id": 'setting',
+//						"url": 'setting.html'
+//					});
+//				 	var mapsPage = $.preload({
+//						"id": 'maps',
+//						"url": 'maps.html'
+//					});
+					var webmapPage = $.preload({
+						"id": 'webmap',
+						"url": 'webmap1.html'
+					});
+//					var devicePage = $.preload({
+//						"id": 'devices',
+//						"url": 'devices/device_list.html'
+//					});
+					//设置
+					var settingButton = doc.getElementById('setting');
+					//settingButton.style.display = settings.autoLogin ? 'block' : 'none';
+					settingButton.addEventListener('tap', function(event) {
+//						$.openWindow({
+//							id: 'setting',
+//							show: {
+//								aniShow: 'pop-in'
+//							},
+//							styles: {
+//								popGesture: 'hide'
+//							},
+//							waiting: {
+//								autoShow: true,
+//								title:"正在加载..."
+//							}
+//						});
+					});
+					document.getElementById("openmaps").addEventListener("tap",function(){
+						//plus.webview.open( "maps.html", "maps",
+						//{}, {}, 600 );
+						
+						$.openWindow({
+							    url:"maps.html",
+							    id:"maps",
+								style:{ },
+								extras:{deviceID:"11"},
+								show: {  
+							        autoShow: true, //页面loaded事件发生后自动显示，默认为true  
+							       // aniShow: animationType, //页面显示动画，默认为”slide-in-right“；  
+							       // duration: animationTime //页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；  
+							    },
+							    waiting: {  
+							        autoShow: true, //自动显示等待框，默认为true  
+							        title: '正在加载...', //等待对话框上显示的提示内容  
+							        options: {  
+							           // width: waiting - dialog - widht, //等待框背景区域宽度，默认根据内容自动计算合适宽度  
+							           // height: waiting - dialog - height, //等待框背景区域高度，默认根据内容自动计算合适高度  
+							           }
+						        }  
+						});
+						
+//						 $.openWindow({
+//							id: 'maps',
+//							show: {
+//								aniShow: 'pop-in',
+//								autoShow: true
+//							},
+//							styles: {
+//								popGesture: 'none'
+//							},
+//							waiting: {
+//								//autoShow: true,
+//								title:"正在加载..."
+//							}
+//						});
+					});
+					document.getElementById("openwebmaps").addEventListener("tap",function(){
+						 $.openWindow({
+							id: 'webmap',
+							show: {
+								aniShow: 'pop-in',
+								autoShow: true
+							},
+							styles: {
+								popGesture: 'none'
+							},
+							waiting: {
+								autoShow: true,
+								title:"正在加载..."
+							}
+						});
+					});
+					document.getElementById("deviceweb").addEventListener("tap",function(){
+						 $.openWindow({
+							id: 'devices',
+ 						    url: 'devices/device_list.html',
+							show: {
+								aniShow: 'pop-in',
+								autoShow: true
+							},
+							styles: {
+								popGesture: 'none'
+							},
+							waiting: {
+								autoShow: true,
+								title:"正在加载..."
+							},
+							extras:{name:"张三"}
+						});
+					});
+					//--
+					$.oldBack = mui.back;
+					var backButtonPress = 0;
+					$.back = function(event) {
+						backButtonPress++;
+						if (backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>

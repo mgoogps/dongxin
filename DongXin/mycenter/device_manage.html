@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="../css/mui.min.css"/>
+</head>
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">设备管理</h1>
+    </header>
+    <div class="mui-content">
+       		<ul class="mui-table-view" id="ulGroupList">
+			</ul> 
+    </div>
+    <script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/app.js" ></script>
+    <script type="text/javascript" src="../js/basic/ajax.js" ></script>
+    <script type="text/javascript">
+    mui.init()
+    mui.plusReady(function () {
+    	GetGroupList () ;
+    });
+    function GetGroupList () {
+		var way = new ajaxPar("GetGroupList");
+		way.ajax({
+			url:"/ajax/DevicesAjax.asmx?op=GetGroupList",
+			data:{userid:"0"},
+			success:function(res){
+				var html=[];
+				mui.each(res,function (index,item) {
+					if (item.GroupID == "-1") {
+						html.push('<li class="mui-table-view-cell mui-collapse mui-active">');	
+					}else{
+						html.push('<li class="mui-table-view-cell mui-collapse">');
+					} 
+					html.push('<a class="mui-navigate-right" href="#">'+  item.GroupName +'</a>'); 
+					html.push('<ul class="mui-table-view" id="Group'+item.GroupID+'"></ul>');
+					html.push('</li>'); 
+				})
+				document.getElementById("ulGroupList").innerHTML = html.join('');
+				 
+				GetDevicesList();
+			}
+		}); 
+	}
+    function GetDevicesList () {
+		var url ="/ajax/DevicesAjax.asmx?op=GetDevicesList";
+		var way = new ajaxPar("GetDevicesList"); 
+		way.ajax({
+		 	url:url,
+		 	data:{userid:"0"},
+		 	success:function(res){
+		 		mui.each(res,function (index,item) { 
+		 			var li = createLi(item); 
+			 	  	document.getElementById("Group"+item.GroupID).appendChild(li);
+		 		});  
+			}
+		});
+	}
+    
+	function createLi(item) {
+		var li = document.createElement("li");
+		li.setAttribute("imei", item.SerialNumber); 
+	 	li.setAttribute("status",item.Status);
+	 	li.name="liDevices";
+	 	li.setAttribute("class","mui-table-view-cell");// mui-media  
+	  	li.innerHTML = (item.DeviceName || item.SerialNumber); 
+	  	li.addEventListener("tap",deviceLiClick);
+	  	li.id= "liDevices_"+item.DeviceID; 
+	  	return li;
+	}
+	function deviceLiClick (e) {
+		var DeviceID = this.getAttribute("id").split('_')[1];
+		mui.openWindow({
+			url:"../devices/device_detail.html",
+			id:"device_detail",
+			show: {
+				autoShow: true,
+				//aniShow: 'pop-in'
+			},
+			styles: {
+				popGesture: 'hide'
+			},
+			waiting: {
+				autoShow: true,
+				title: '正在加载...',
+			},
+			extras:{
+			 	deviceid : DeviceID,
+			 	source : "device_manage"
+			}
+		});
+	}
+    </script>
+</body>
+</html>

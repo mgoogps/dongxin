@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<style type="text/css">
+			#allmap {	
+		 	  	width: 100%;
+				position: absolute;
+				top: 44px;
+				bottom: 0px;
+				 
+				line-height: 200px;
+				text-align: center;
+				background: #FFFFFF;
+				border: 0px solid red;
+			}
+			#mapmemu{
+				position: fixed;bottom: 10px; left: 10px; right: 10px; height: 40px; background-color: #FFFFFF;-webkit-border-radius: 10px;text-align: center;
+				line-height: 35px; border: 1px solid #4B5B41;
+			}
+			.pspan{
+				border-right: 1px solid darkblue;
+				height: 100%; 
+				vertical-align: middle;
+				padding-right: 2px; 
+			}
+			.radius{
+				position: fixed; top: 50px;left: 15px;
+				width:52px; height:50px; background-color:#6ABDFF; border-radius:25px;
+			}
+			.radius span{
+				height:50px; line-height:50px; display:block; text-align:center;word-wrap:break-word;font-size:  small;
+			}
+		</style>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SAbCayX7PG5UMsqW6d1DZ9K0"></script>
+		<link href="css/mui.min.css" rel="stylesheet" /> 
+		<link rel="stylesheet" href="css/iconfont.css" />
+	</head> 
+	<body>
+		<header class="mui-bar mui-bar-nav" style="padding-right: 15px;">
+			<a id="mycenter" class="mui-icon mui-icon-person mui-pull-left"></a>
+			<h1 class="mui-title" id="title">地图中心</h1>
+			<a id='more' class="mui-pull-right mui-btn-link">更多</a>
+		</header>
+		<div class="mui-content">
+			<div id="allmap"></div>
+			<div class="radius">
+				  <span id="speed">0km</span>
+			</div>
+			<div id="mapmemu" class="mui-row">
+				 <span class="pspan">实时跟踪</span>
+				 <span id="mapmemu_history" class="pspan">历史轨迹</span>
+				 <span id="mapmemu_fence" class="pspan">一键围栏</span>
+				 <span class="pspan" style="border-right: hidden;" id="switch_device_list">切换目标</span> 
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript" src="js/map/map.js" ></script>
+		<script type="text/javascript" src="js/basic/ajax.js" ></script> 
+		<script type="text/javascript" src="js/map/webmap.js" ></script>
+		<script type="text/javascript" src="js/basic/update.js" ></script>
+	</body>
+</html>
+

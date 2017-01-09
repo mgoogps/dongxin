@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../js/plugin/picker/mui.picker.min.css" />
+		<style type="text/css">
+			#allmap {	
+		 	  	width: 100%;
+				position: absolute;
+				top: 44px;
+				bottom: 0px; 
+				line-height: 200px;
+				text-align: center;
+				background: #FFFFFF;
+				border: 0px solid red;
+			}
+			.mapmemu{
+				position: fixed;bottom: 10px; left: 10px; right: 10px; height: 40px;
+				background-color: #FFFFFF;-webkit-border-radius: 10px;text-align: center;
+				line-height: 35px; border: 1px solid #4B5B41;
+				height: 70px;
+			}
+			.pspan{
+				border-right: 1px solid darkblue;
+				height: 100%; 
+				vertical-align: middle;
+				padding-right: 2px; 
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">历史轨迹</h1>
+		</header>
+		<div class="mui-content">
+		    <div id="allmap"></div>
+		    
+		 <!--   <div id="mapmemu" class="mui-row mapmemu">
+				<span class="pspan" id="pickerDate"> </span>
+				<span class="pspan" id="pickerDate1"> </span>
+				 <button type="button" id="btnSearchHistory" data-loading-text="查询中..." data-loading-icon="mui-spinner mui-spinner-custom" class="mui-btn mui-btn-primary" style="vertical-align: middle;">查询</button>
+				<button type="button" id="btnStop" class="mui-btn mui-btn-danger mui-hidden" style="vertical-align: middle;">停止</button>  
+			</div>-->
+			<div class="mapmemu" style="bottom: 12px;">
+				<div style=" height: 50%;width: auto;text-align: left;" id="divStartTime">开始时间:</div> 
+				<div style="height: 50%;width: auto; text-align: left;" id="divEndTime">结束时间: </div>
+				<!--<div class="mui-input-row mui-input-range">
+					<label><span id='speed_range_val'>400</span>米/秒</label>
+					<input type="range" min="300" max="1000" step="50" id="speed_range">
+				</div>--> 
+				<button type="button" class="mui-btn mui-btn-primary" style="position: fixed;right: 30px; bottom: 30px;" id="btnSearchHistory">查询</button>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/plugin/picker/mui.picker.min.js" ></script>
+		<script type="text/javascript" src="../js/app.js" ></script>
+		<script type="text/javascript" src="../js/basic/ajax.js" ></script>
+		<script type="text/javascript" src="../js/map/map.js" ></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SAbCayX7PG5UMsqW6d1DZ9K0"></script>
+		<script type="text/javascript" src="../js/map/BDLuShu.js" ></script>
+		<script type="text/javascript" src="../js/basic/utils.js" ></script>
+		<script type="text/javascript">
+	 		var mgoo;
+	 		var lushu;
+			var playSpeed = 400;
+			var distance;
+			var deviceName=""
+			mui.init();
+			mui.plusReady(function () {
+				mgoo = new mgMap("allmap","BAIDU");
+				mgoo.showNavigation = false;
+				mgoo.isLocateMyCity = true; 
+				mgoo.loadMap();
+				mgoo.setZoom(10);
+				
+				var self = plus.webview.currentWebview();
+				var deviceid = self.deviceid;
+				deviceName = self.device_name;
+				
+				var myDate = new Date();
+				var st = new Date(myDate.getTime() - 1000*60*60*24).format('yyyy-MM-dd hh:mm');
+				var et = myDate.format('yyyy-MM-dd hh:mm');
+				  
+				//myDate.getFullYear()+"-"+(myDate.getMonth()+1)+"-"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes();
+
+				var dtStartPicker = new mui.DtPicker({"value":  st}); 
+				var dtEndPicker = new mui.DtPicker({"value": et});
+				var pickerStartDateButton = document.getElementById('divStartTime');
+				var pickerEndDateButton = document.getElementById("divEndTime");
+				pickerStartDateButton.innerText ="开始时间:"+ st;
+				pickerEndDateButton.innerHTML ="结束时间:"+ et;
+			  
+				pickerStartDateButton.addEventListener('tap',function () { 
+			        dtStartPicker.show(function (selectItems) {
+			        	st = selectItems.y.value +"-"+selectItems.m.value+"-"+selectItems.d.value+" "+selectItems.h.value+":"+selectItems.i.value;
+ 						pickerStartDateButton.innerText = "开始时间:"+st;
+				    })
+				});
+				pickerEndDateButton.addEventListener("tap",function () {
+					dtEndPicker.show(function (selectItems) {
+						et = selectItems.y.value +"-"+selectItems.m.value+"-"+selectItems.d.value+" "+selectItems.h.value+":"+selectItems.i.value;
+						pickerEndDateButton.innerText ="结束时间:"+ et;
+					});
+				});
+				/*document.querySelector("#speed_range").addEventListener("change",function(){ 
+	                playSpeed = this.value;
+	                document.getElementById("speed_range_val").innerText = this.value;
+	                if (lushu) {
+	                	lushu._opts.speed = this.value;
+	                }
+          		},false)*/
+				
+				mui(document.body).on('tap', '#btnSearchHistory', function(e) { 
+					var a = new ajaxPar("GetHistoryLocusList");
+					//var sendStartTime = pickerStartDateButton.innerText.Split(':')[1];
+					//var sendEndTime = pickerEndDateButton.innerText.Split(':')[1];
+					//console.log(deviceid);
+					a.ajax({
+					 	url:"/ajax/DevicesAjax.asmx?op=GetHistoryLocusList",
+					 	data:{deviceid : deviceid,startdate : st ,enddate:et,speedfilter:"0"},
+					 	timeout:0,
+					 	success:function(d) {
+					 		if (d.length == 0) {
+					 			plus.nativeUI.toast("没有查询到数据.");
+					 			return;
+					 		}
+					 		var datalist = [];
+				            showInfoWindowData = [];
+				            var len = d.length- 1;
+				            for (var i = 0; i < len ; i++) {
+				                var v = d[i];
+				                var point = mgoo.Point(parseFloat(v.OLng).toFixed(5), parseFloat(v.OLat).toFixed(5)); 
+				               // var distance = mgoo.getDistance(point, mgoo.Point(d[i + 1].OLng, d[i + 1].OLat));
+				                datalist.push(point);
+				               // showInfoWindowData.push({ "time": v.DeviceTime, "speed": v.Speed + "Km", "Course": GetCoureName(v.Course) });
+				            } 
+				            mgoo.polyLine(datalist, { strokeColor: "blue", strokeWeight: 6, strokeOpacity: 0.5 });
+				            mgoo.setFitView(datalist); //跳转最佳视野
+				            var qidian = new BMap.Marker(new BMap.Point(datalist[0].lng,datalist[0].lat));  // 创建标注
+							mgoo.map.addOverlay(qidian);     
+				            var qidianLabel = new BMap.Label("起点", {offset: new BMap.Size(0, -25) }); // 创建文本标注对象
+				            var labelstyle = {color : "red",fontSize : "12px",height : "20px",lineHeight : "20px",fontFamily:"微软雅黑"}
+							qidianLabel.setStyle(labelstyle);
+							qidian.setLabel(qidianLabel);
+							console.log(datalist[datalist.length-1].lng+","+datalist[datalist.length-1].lat);
+							var zhongdian = new BMap.Marker(new BMap.Point(datalist[datalist.length-1].lng,datalist[datalist.length-1].lat));  // 创建标注
+							var zdLabel = new BMap.Label("终点", {offset: new BMap.Size(0, -25) }); // 创建文本标注对象
+							zdLabel.setStyle(labelstyle);
+							zhongdian.setLabel(zdLabel);
+							mgoo.map.addOverlay(zhongdian);     
+				            /*lushu = new BMapLib.LuShu(mgoo.map, datalist, {
+				                defaultContent: "请稍后...",
+				                autoView: true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+				                icon: new BMap.Icon('../images/maps/point@24.png', new BMap.Size(32, 26), { anchor: new BMap.Size(16, 13) }),
+				                speed: playSpeed,
+				                enableRotation: true,//是否设置marker随着道路的走向进行旋转
+				                landmarkPois: [],
+				                interval: 60
+				            }); */
+				            //mgoo.centerAndZoom(parseFloat(d[0].OLng).toFixed(5), parseFloat(d[0].OLat).toFixed(5), 18);
+				         	//lushu.start(); 
+					 	},
+						error:function (a,b,c) {
+							console.log(a);
+							console.log(b);
+							console.log(c);
+						}
+					});
+				}); 
+				 
+				/*document.getElementById('btnStop').addEventListener('tap',function () {
+				    lushu.stop();
+				})*/
+				var mapPage = mui.preload({
+					"id": 'webmap',
+					"url": 'webmap.html'
+				}); 
+				var _back = mui.back;
+				mui.back = function(event) {
+					 mui.fire(mapPage,"show",{id:deviceid});
+					 _back();
+				};
+			});
+			 
+		</script>
+	</body>
+
+</html>

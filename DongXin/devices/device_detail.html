@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../js/plugin/picker/mui.picker.min.css" />
+	 
+	</head>
+
+	<body> 
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">设备信息</h1> 
+			<span id="info" class="mui-icon mui-pull-right iconfont icon-msnui-save" style="color: #999;"></span>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+			    <div class="mui-input-row">
+			        <label>设备编号:</label> 
+			    	<input type="text" class="mui-input-clear" id="txtSerialNumber" disabled="disabled">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>设备名称:</label>
+			        <input type="text" class="mui-input-clear" id="txtDeviceName" placeholder="请输入设备名称" style="border: 1px solid #BBBBBB ;border-radius:5px;">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>设备型号:</label>
+			        <input type="text" class="mui-input-clear" id="txtModel" disabled="disabled">
+			    </div>
+			    <div class="mui-input-row" >
+			        <label>设备分组:</label>  
+		 			<div id="pickerGroup" style="height: 100%; border: 1px solid #BBBBBB; margin-left:130px; padding-top: 8px; border-radius:5px;">
+		 				<span id="GroupText"></span>
+		 				<span class="mui-icon mui-pull-right mui-right mui-icon-arrowdown"></span>
+		 			</div> 
+			    </div>
+			    <div class="mui-input-row">
+			        <label>启用时间:</label>
+			        <input type="text" class="mui-input-clear" id="txtActiveDate" disabled="disabled">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>到期时间:</label>
+			        <input type="text" class="mui-input-clear" id="txtHireExpireDate" disabled="disabled">
+			    </div>
+			    <div class="mui-input-row mui-hidden">
+			        <label>车  牌  号:</label>
+			        <input type="text" class="mui-input-clear" id="txtCarNum" placeholder="请输入车牌号" style="border: 1px solid #BBBBBB ;border-radius:5px;">
+			    </div>
+			    <div class="mui-input-row mui-hidden">
+			        <label>联  系  人:</label>
+			        <input type="text" class="mui-input-clear" id="txtCarUserName" placeholder="请输入联系人" style="border: 1px solid #BBBBBB ;border-radius:5px;">
+			    </div>
+			    <div class="mui-input-row mui-hidden">
+			        <label>联系电话:</label>
+			        <input type="text" class="mui-input-clear" id="txtCellPhone" placeholder="请输入联系电话" style="border: 1px solid #BBBBBB ;border-radius:5px;">
+			    </div>
+			    <div class="mui-button-row"> 
+			       <!-- <button type="button" class="mui-btn mui-btn-danger" >取消</button>-->
+			        <button type="button" class="mui-btn mui-btn-primary" id="btnConfirm">确认</button>
+			    </div>
+			</form>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/plugin/picker/mui.picker.min.js" ></script>
+		<script type="text/javascript" src="../js/app.js" ></script>
+		<script type="text/javascript" src="../js/basic/ajax.js" ></script>
+		<script type="text/javascript">
+				(function($, doc) {
+				$.init();
+				$.plusReady(function() {
+					var picker = new mui.PopPicker(); 
+					
+					var state = app.getState();
+					var a = new ajaxPar("GetGroupList");
+					var groupList = [];
+					a.ajax({
+						url:"/ajax/DevicesAjax.asmx?op=GetGroupList",
+						data:{userid : state.userid},
+						async: false,
+						success:function (res) {
+							mui.each(res,function (index,element) {
+								groupList.push({value:element.GroupID,text:element.GroupName})
+							})
+						}
+					});
+					picker.setData(groupList); 
+					document.getElementById('pickerGroup').addEventListener('tap',function () {
+					    picker.show(function (selectItems) { 
+						    document.getElementById("GroupText").innerText  = selectItems[0].text;  
+						})   
+					})
+					
+					var mapPage = $.preload({
+						"id": 'webmap',
+						"url": 'webmap.html'
+					}); 
+					var self = plus.webview.currentWebview();
+					var deviceid = self.deviceid;
+					
+					a = new ajaxPar("GetDeviceInfoByID");
+					a.ajax({
+						url:"/ajax/DevicesAjax.asmx?op=GetDeviceInfoByID",
+						data:{deviceid:deviceid},
+						success:function (res) {
+							picker.pickers[0].setSelectedValue(res.GroupID,0,function () { 
+								document.getElementById("GroupText").innerText = picker.getSelectedItems()[0].text; 
+							})
+							document.getElementById("txtSerialNumber").value=res.SerialNumber;
+							document.getElementById("txtDeviceName").value = res.DeviceName;
+							document.getElementById("txtModel").value = res.DataText;
+							document.getElementById("txtActiveDate").value = res.ActiveDate == '1900/1/1 0:00:00' ?'未激活':res.ActiveDate;
+							document.getElementById("txtHireExpireDate").value = res.HireExpireDate == '1900/1/1 0:00:00' ?'未激活':res.HireExpireDate;
+							document.getElementById("txtCarNum").value = res.CarNum;
+							document.getElementById("txtCarUserName").value = res.CarUserName;
+							document.getElementById("txtCellPhone").value = res.CellPhone;
+						}
+					})
+					var _back = $.back;
+					document.getElementById("btnConfirm").addEventListener("tap",function (e) {
+						var DeviceName = document.getElementById("txtDeviceName").value;
+						var CarUserName = document.getElementById("txtCarUserName").value;
+						var CellPhone = document.getElementById("txtCellPhone").value;
+						var CarNum = document.getElementById("txtCarNum").value;
+						var GroupID = picker.getSelectedItems()[0].value; 
+						a = new ajaxPar("UpdateDeviceInfoByID");
+						a.ajax({
+							url:"/ajax/DevicesAjax.asmx?op=UpdateDeviceInfoByID",
+							data: {deviceid:deviceid,devicename:DeviceName,carusername:CarUserName,cellphone:CellPhone,carnum:CarNum,groupid:GroupID},
+							success:function (res) {
+								plus.nativeUI.toast(res.Message);
+								if (res.StatusCode === 200) {
+									if (self.source) {
+										mui.fire(mapPage,"show",{id:deviceid});
+									} 
+						 			_back();
+								} 
+							}
+						});
+					});
+					
+					$.back = function(event) {
+						if (self.source) {
+							mui.fire(mapPage,"show",{id:deviceid});
+						} 
+						_back();
+					};
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+</html>
